@@ -178,6 +178,9 @@ void insert_at_word_list(struct row_list_node **row, char str[])
         /* Error one
         //temp->next = r->link_right;   //basically insert at start.
         //r->link_right = temp;
+
+
+        par isko isliye nhi kar sakte kyunki isse fir reapted words nhi catch kar paayenge during insertion.....
         */
     }
     
@@ -283,7 +286,7 @@ int main()
 
     FILE *fp;
     char ch1[20];
-    fp = fopen("a.txt","r");
+    fp = fopen("b.txt","r");
 
     
     printf("****************************************************Welcome**************************************************************\n");
@@ -320,7 +323,7 @@ int main()
             case 5: bubble_sort_dictionary(&row);
                     break;
 
-            case 10: printf("Thank You\n\n");
+            case 10: printf("______________________________________Thank You______________________________________________________\n\n");
                     flag = 0;
                     break;
             default: printf("Please Enter A Valid Choice\n\n\n"); 
