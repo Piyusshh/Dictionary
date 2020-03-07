@@ -20,7 +20,7 @@ struct word_list_node
 
 struct MRU_node
 {
-    char char_var[ws];
+    char word[ws];
     int freq;
     struct MRU_node *next;
 };
@@ -388,8 +388,9 @@ int binarySearch(struct word_list_node *head, char search_str[])
 
 
 
-void search_in_dictionary_binary(struct row_list_node *row,char search_str[])
+int search_in_dictionary_binary(struct row_list_node *row,char search_str[])
 {
+    int retval;
     struct row_list_node *r;
     r = row;
 
@@ -405,12 +406,15 @@ void search_in_dictionary_binary(struct row_list_node *row,char search_str[])
     if (found == 1)
     {
         printf(" \"%s\" spellled correctly...........\n\n",search_str);
+        retval = 1;
     }
     else if(found == 0)
     {
         printf(" \"%s\" spelled wrongly...........\n\n");
+        retval = 0;
     }
     
+    return retval;
     
 }
 
@@ -468,41 +472,119 @@ void search_in_dictionary_linear(struct row_list_node *row,char search_str[])
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-int search_in_mru(struct MRU_node *mru, char str[])
+int is_present(struct MRU_node *mru, char str[])
 {
     struct MRU_node *temp;
     temp = mru;
     int found = 0;
     int retval = 0;
-    while(temp != NULL && (found == 0))
+    if(mru == NULL)
     {
-        if(strcmp(temp->char_var,str) == 0)
-        {
-            found = 1;
-            retval = 1;
-
-        }
-        temp = temp->next;
+        retval == 0;
+        found = 1;
     }
+    else
+    {
+        while(temp != NULL && found == 0)
+        {
+            if(strcmp(temp->word,str) == 0)
+            {
+                found = 1;
+                retval = 1;
 
+            }
+            temp = temp->next;
+        }
+    }
+    
     return retval;
 }
 
+struct MRU_node* search(struct MRU_node* head, char search_str[])  // for searching node
+{
+    struct MRU_node *temp;
+    temp = head;
+    
+    while(strcmp(temp->word,search_str) != 0)
+    {
+        temp = temp->next;
+    }
+    return temp; 
+
+}
+
+void swap_mru(struct MRU_node *head,struct MRU_node *temp)
+{
+    struct MRU_node *extra = NULL;
+    printf("swapped successsfully\n");
+
+}
+
+int length_of_mru(struct MRU_node *head)
+{
+    int count = 0;
+    struct MRU_node *temp;
+    temp = head;
+    while(temp != NULL)
+    {
+        count++;
+        temp = temp->next;
+    }
+
+    return count;
+}
+
+struct MRU_node* insert_at_start_mru(struct MRU_node *head, char str[])
+{
+    struct MRU_node *temp;
+    temp = (struct MRU_node*)malloc(sizeof(struct MRU_node));
+    strcpy(temp->word,str);
+    temp->freq = 1;
+
+    if(head == NULL)
+    {
+        head = temp;
+        temp->next = NULL;
+    }
+    else
+    {
+        temp->next = head;
+        head = temp;
+    }
+return head;
+}
 
 
+void print_mru(struct MRU_node *head)
+{
+    struct MRU_node *temp;
+    temp = head;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    while(temp != NULL)
+    {
+        printf("%s   ",temp->word);
+        printf("     %d\n",temp->freq);
+        temp = temp->next;
+    }   
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main()
 {
     char str[ws];
     char str1[ws];   // for reading from user input file.
     struct MRU_node *mru = NULL;
+    struct MRU_node *temp = NULL;
     char search_str[ws];
     struct row_list_node *row = NULL;
     char word[20];
 
     int choice;
     int flag = 1;
+    int mru_found;
+    int dict_found;
 
     FILE *fp;   // for reading from dictionary file
     FILE *fp1;  // for reading from user input
@@ -527,6 +609,7 @@ int main()
         printf("6. Remove All punctuations from user input\n");
         printf("7. Direct From Dictionary:- Search for the spelled and misspleed words\n");
         printf("8. First from MRU:- Search for the speled and misspelled words\n");
+        printf("9. Print The Most Recently Used List\n");
         printf("10. Exit\n");
         scanf("%d",&choice);
         switch (choice)
@@ -572,9 +655,51 @@ int main()
             case 8: fp4 = fopen("new_input.txt","r");
                     while(fscanf(fp4,"%s",search_str) != EOF)
                     {
-                        search_in_dictionary_binary(row,search_str);
+                        mru_found = is_present(mru,search_str);    // 1 means found
+                        
+                        if(mru_found == 1)   //    mtlb mil gaya hai ...... isliye legth ka koi issue nhi hai
+                        {
+                            if(strcmp(mru->word,search_str) == 0)  // if found in head
+                            {
+                                printf("%s found in mru in first position\n");
+                                mru->freq = mru->freq + 1;
+                            }
+                            else
+                            {
+                                temp = search(mru,search_str);
+                                temp->freq = temp->freq + 1;  // frequncy increased
+                                swap_mru(mru,temp);
+                            }
+                            
+                        }
+                        
+                        else
+                        {
+                            //printf(" ..%s... not found in mru\n",search_str);
+                            dict_found = search_in_dictionary_binary(row,search_str); // 1 means found
+                            if(dict_found == 1)  //mean if found in dictionary
+                            {
+                                if(length_of_mru(mru) < 10)
+                                {
+                                    mru = insert_at_start_mru(mru,search_str);
+                                    printf("....%s...  found in dctionary \n",search_str);
+                                }
+                                
+                            }
+                            
+                            else // not found in dictionary  (working correctly)
+                            {
+                                printf(".....%s......   word not found in dictionary false false\n",search_str);
+                                //insert_at_start_mru(mru,search_str); 
+                               // delete_last_mru(mru);
+                            }
+                        }
+                        
                     }
                     fclose(fp4);
+                    break;
+
+            case 9: print_mru(mru);
                     break;
 
             case 10: printf("______________________________________Thank You______________________________________________________\n\n");
