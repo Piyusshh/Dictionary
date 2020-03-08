@@ -520,10 +520,101 @@ struct MRU_node* search(struct MRU_node* head, char search_str[])  // for search
 
 }
 
-void swap_mru(struct MRU_node **head,struct MRU_node **temp)
+void swap_mru(struct MRU_node **head,struct MRU_node *temp)
 {
-    struct MRU_node *first = *head;
-    struct MRU_node *second = *temp;
+    
+    
+    struct MRU_node *first;
+    first = *head;
+
+    struct MRU_node *second;
+    second = temp;
+
+    printf("___%s___ and ___%s___ are Swapped Succesfully\n",first->word,second->word);
+
+    struct MRU_node *new = (struct MRU_node*)malloc(sizeof(struct MRU_node));
+    new->freq = second->freq;
+    strcpy(new->word,second->word);
+    new->next = first;
+    *head = new;
+
+    struct MRU_node *temp1;
+    temp1 = *head;
+    while(temp1->next != temp)
+    {
+        temp1 = temp1->next;
+    }
+
+    temp1->next = temp->next;
+
+    /*
+    first = insert_at_start_mru(first,temp->word);
+    *head = first;
+    first->freq = temp->freq + 1;
+
+    // now first is pointing to head
+
+    struct MRU_node *extra = NULL;
+    extra = first;
+     while (strcmp(first->word,temp->word) != 0)
+     {
+         extra = first;
+         first = first->next;
+     }
+     extra->next = second->next;
+    */
+    
+    /*
+    struct MRU_node *extra;
+    extra = (struct MRU_node*)malloc(sizeof(struct MRU_node));
+
+    extra->freq = head->freq;
+    strcpy(extra->word,head->word);
+    extra->next = head->next;
+
+    first->freq = second->freq;
+    strcpy(first->word,second->word);
+    first->next = second->next;
+
+    second->freq = extra->freq;
+    strcpy(second->word,extra->word);
+    second->next = extra->next;
+    */
+
+
+   
+
+
+    /*
+    struct MRU_node *first;
+    first = head;
+
+    struct MRU_node *second;
+    second = temp;
+
+    struct MRU_node *fourth;
+    fourth = first->next;
+
+    struct MRU_node *third = NULL;
+    struct MRU_node *transverse;
+    transverse = head;
+
+    while(strcmp(transverse->word,temp->word) != 0)
+    {
+        third = transverse;
+        transverse = transverse->next;
+    } // after this lopp i got the previous node of temp.
+
+    first->next = second->next;
+    second->next = fourth;
+    third->next = first;
+
+
+    printf("___%s___ and ___%s___ are Swapped Succesfully\n",first->word,second->word);
+
+
+    return second;
+    */
     /*
     struct MRU_node *extra = NULL;
 
@@ -578,7 +669,7 @@ void swap_mru(struct MRU_node **head,struct MRU_node **temp)
     
     printf(" __%s__ and __%s__ are swapped successsfully\n",varx,vary);
     */
-   printf("___%s___ and ___%s___ are Swapped Succesfully\n",first->word,second->word);
+   
 
 }
 
@@ -890,7 +981,8 @@ int main()
                             {
                                 temp = search(mru,search_str);
                                 temp->freq = temp->freq + 1;  // frequncy increased
-                                swap_mru(&mru,&temp);
+                                swap_mru(&mru,temp);
+                                //move_to_begining(&mru,&temp);
                             }
                             
                         }
