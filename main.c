@@ -662,6 +662,57 @@ void print_miss_spelled(struct miss_node *last)
     while(p != last->next);
 }
 
+
+void sort_circular_list(struct miss_node *miss_head)
+{
+    struct miss_node *index = NULL;
+    struct miss_node *current;
+    struct miss_node *head;
+    head = miss_head;
+    current = head;
+
+    int temp_freq;
+    char temp_str[ws];
+
+    if(head == NULL)
+    {
+        printf("Misspelled word list is Empty\n");
+    }
+    else
+    {
+        do
+        {
+            index = current->next;
+            while(index != head)
+            {
+                if(current->freq > index->freq)
+                {
+                    temp_freq = current->freq;
+                    strcpy(temp_str,current->word);
+
+                    current->freq = index->freq;
+                    strcpy(current->word,index->word);
+
+                    index->freq = temp_freq;
+                    strcpy(index->word,temp_str);
+                }
+
+                index = index->next;
+
+            }
+
+            current = current->next;
+
+        } while (current->next != head);
+        
+    }
+    
+
+
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main()
 {
@@ -808,7 +859,8 @@ int main()
             case 9: print_mru(mru);
                     break;
 
-            case 10: print_miss_spelled(miss);   // imp imp imp
+            case 10: sort_circular_list(miss->next);  // for sorting the circular list
+                    print_miss_spelled(miss);   // imp imp imp
                     break;
 
             case 15: printf("______________________________________Thank You______________________________________________________\n\n");
