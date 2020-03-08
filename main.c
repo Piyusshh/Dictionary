@@ -25,6 +25,13 @@ struct MRU_node
     struct MRU_node *next;
 };
 
+struct miss_node
+{
+    char word[ws];
+    int freq;
+    struct miss_node *next;
+};
+
 
 void print_full_dictionary(struct row_list_node *row) // to print full dictionary with all rows and coloumns...
 {
@@ -569,17 +576,104 @@ void print_mru(struct MRU_node *head)
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct miss_node* addToEmpty(struct miss_node *last, char str[])
+{
+    if (last != NULL)
+    {
+        return last;
+    }
+
+    struct miss_node *temp = (struct miss_node*)malloc(sizeof(struct miss_node));
+    strcpy(temp->word,str);
+    temp->freq = 1;
+
+    last = temp;
+    last->next = last;
+    return last;
+
+}
+
+struct miss_node* addEnd(struct miss_node *last, char str[])
+{
+    struct miss_node *temp = (struct miss_node*)malloc(sizeof(struct miss_node));
+    strcpy(temp->word,str);
+    temp->freq = 1;
+    
+    temp->next = last->next;
+    last->next = temp;
+    last = temp;
+
+    return last;
+}
+
+
+struct miss_node* insert_miss(struct miss_node *last, char str[])
+{
+    struct miss_node *transverse;
+
+    int found = 0;
+
+    if(last == NULL)
+    {
+        printf(".............................List is Empty........................................\n");
+        return;
+    }
+
+    transverse = last->next; // pointing to the first node of the list 
+    
+    while((transverse != last) && (found == 0))
+    {
+        if(strcmp(transverse->word,str) == 0)
+        {
+            found = 1; // word found so break
+            transverse->freq = transverse->freq + 1;
+        }
+        transverse = transverse->next; /////newly added
+    }
+    
+    if(found == 0)
+    {
+        last = addEnd(last,str);
+    }
+
+    return last;
+
+}
+
+
+void print_miss_spelled(struct miss_node *last)
+{
+    struct miss_node *p;
+    
+    if (last == NULL)
+    {
+        printf("_________________________The List Is Empty__________________________________\n");
+    }
+    p = last->next;
+
+    do
+    {
+        printf("%s   ",p->word);
+        printf("     %d\n",p->freq);
+        p = p->next;
+    }
+    while(p != last->next);
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main()
 {
     char str[ws];
     char str1[ws];   // for reading from user input file.
-    struct MRU_node *mru = NULL;
+    struct MRU_node *mru = NULL;  // head for mostrecently used word list.
     struct MRU_node *temp = NULL;
     char search_str[ws];
     struct row_list_node *row = NULL;
     char word[20];
+
+    struct miss_node *miss = NULL;
 
     int choice;
     int flag = 1;
@@ -597,7 +691,7 @@ int main()
     
 
     
-    printf("****************************************************Welcome**************************************************************\n");
+    printf("*******************************************************Welcome********************************************************************\n");
     while (flag == 1)
     {
         printf("Select any Option\n");
@@ -610,7 +704,8 @@ int main()
         printf("7. Direct From Dictionary:- Search for the spelled and misspleed words\n");
         printf("8. First from MRU:- Search for the speled and misspelled words\n");
         printf("9. Print The Most Recently Used List\n");
-        printf("10. Exit\n");
+        printf("10. Print The Misspelled word list\n");
+        printf("15. Exit\n");
         scanf("%d",&choice);
         switch (choice)
         {
@@ -689,7 +784,18 @@ int main()
                             
                             else // not found in dictionary  (working correctly)
                             {
-                                printf(".....%s......   word not found in dictionary false false\n",search_str);
+                                printf("\" %s \"  word not found in dictionary.\n",search_str);
+                                printf("Therefore inserting in Misspelled Word List\n");
+                                if(miss == NULL)
+                                {
+                                    miss = addToEmpty(miss,search_str);
+
+                                }
+                                else
+                                {
+                                    miss = insert_miss(miss,search_str);
+                                }
+                            
                                 //insert_at_start_mru(mru,search_str); 
                                // delete_last_mru(mru);
                             }
@@ -702,7 +808,10 @@ int main()
             case 9: print_mru(mru);
                     break;
 
-            case 10: printf("______________________________________Thank You______________________________________________________\n\n");
+            case 10: print_miss_spelled(miss);   // imp imp imp
+                    break;
+
+            case 15: printf("______________________________________Thank You______________________________________________________\n\n");
                     flag = 0;
                     fclose(fp);
                     fclose(fp1);
