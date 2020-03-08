@@ -520,10 +520,65 @@ struct MRU_node* search(struct MRU_node* head, char search_str[])  // for search
 
 }
 
-void swap_mru(struct MRU_node *head,struct MRU_node *temp)
+void swap_mru(struct MRU_node **head,struct MRU_node **temp)
 {
+    struct MRU_node *first = *head;
+    struct MRU_node *second = *temp;
+    /*
     struct MRU_node *extra = NULL;
-    printf("swapped successsfully\n");
+
+    struct MRU_node *prevX = NULL;
+    struct MRU_node *currX = *head;
+    char varx [ws];
+    strcpy(varx,currX->word);  // varx contains head data
+    while(currX && (strcmp(currX->word,varx) != 0))
+    {
+        prevX = currX;
+        currX = currX->next;
+    }
+
+
+    struct MRU_node *prevY = NULL;
+    struct MRU_node *currY = *head;
+    struct MRU_node *x = *temp;
+    char vary[ws];
+    strcpy(vary,x->word);  // vary contains temp data
+    while(currY && (strcmp(currY->word,vary) != 0))
+    {
+        prevY = currY;
+        currY = currY->next;
+    }
+
+    // if x is not head of linked list
+    if(prevX != NULL)
+    {
+        prevX->next = currY;
+    }
+    else  // Else make y as new head
+    {
+        *head = currY;
+    }
+
+
+    // if y is not head of linked list
+    if(prevY != NULL)
+    {
+        prevY->next = currX;
+    }
+    else   // Else make x as a new head
+    {
+        *head = currX;
+    }
+
+    // Swap next pointers
+    extra = currY->next;
+    currY->next = currX->next;
+    currX->next = temp;
+    
+    
+    printf(" __%s__ and __%s__ are swapped successsfully\n",varx,vary);
+    */
+   printf("___%s___ and ___%s___ are Swapped Succesfully\n",first->word,second->word);
 
 }
 
@@ -558,6 +613,7 @@ struct MRU_node* insert_at_start_mru(struct MRU_node *head, char str[])
         temp->next = head;
         head = temp;
     }
+    printf("____%s____ found in Dictionary and inserted at MRU\n",str);
 return head;
 }
 
@@ -576,6 +632,22 @@ void print_mru(struct MRU_node *head)
 
 }
 
+
+void delete_last_node_mru(struct MRU_node *mru)
+{
+    struct MRU_node *head;
+    struct MRU_node *prev;
+    head = mru;
+    while(head->next != NULL)
+    {
+        prev = head;
+        head = head->next;
+    }
+    prev->next = NULL;
+    printf("___%s___ is deleted due to limit reached for the MRU\n",head->word);
+    free(head);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 struct miss_node* addToEmpty(struct miss_node *last, char str[])
@@ -591,6 +663,9 @@ struct miss_node* addToEmpty(struct miss_node *last, char str[])
 
     last = temp;
     last->next = last;
+
+    printf("_%s_ added to empty Misspelled list\n",str);
+
     return last;
 
 }
@@ -636,6 +711,7 @@ struct miss_node* insert_miss(struct miss_node *last, char str[])
     if(found == 0)
     {
         last = addEnd(last,str);
+        printf("__%s__ added in Misspelled List\n",str);
     }
 
     return last;
@@ -745,18 +821,18 @@ int main()
     printf("*******************************************************Welcome********************************************************************\n");
     while (flag == 1)
     {
-        printf("Select any Option\n");
-        printf("1. Create Dictionary Index list\n");
-        printf("2. Print Dictionary Row list\n");
-        printf("3. Print Full Dictionary\n");
-        printf("4. Create Full Dictionary\n");
-        printf("5. Sort The Full Dictionary\n");
-        printf("6. Remove All punctuations from user input\n");
-        printf("7. Direct From Dictionary:- Search for the spelled and misspleed words\n");
-        printf("8. First from MRU:- Search for the speled and misspelled words\n");
-        printf("9. Print The Most Recently Used List\n");
-        printf("10. Print The Misspelled word list\n");
-        printf("15. Exit\n");
+        printf("\t\t\t\t\t\t\tSelect any Option\n\n");
+        printf("\t\t\t\t\t\t1. Create Dictionary Index list\n");
+        printf("\t\t\t\t\t\t2. Print Dictionary Row list\n");
+        printf("\t\t\t\t\t\t3. Print Full Dictionary\n");
+        printf("\t\t\t\t\t\t4. Create Full Dictionary\n");
+        printf("\t\t\t\t\t\t5. Sort The Full Dictionary\n");
+        printf("\t\t\t\t\t\t6. Remove All punctuations from user input\n");
+        printf("\t\t\t\t\t\t7. Direct From Dictionary:- Search for the spelled and misspleed words\n");
+        printf("\t\t\t\t\t\t8. First from MRU:- Search for the speled and misspelled words\n");
+        printf("\t\t\t\t\t\t9. Print The Most Recently Used List\n");
+        printf("\t\t\t\t\t\t10. Print The Misspelled word list\n");
+        printf("\t\t\t\t\t\t15. Exit\n");
         scanf("%d",&choice);
         switch (choice)
         {
@@ -814,7 +890,7 @@ int main()
                             {
                                 temp = search(mru,search_str);
                                 temp->freq = temp->freq + 1;  // frequncy increased
-                                swap_mru(mru,temp);
+                                swap_mru(&mru,&temp);
                             }
                             
                         }
@@ -828,14 +904,19 @@ int main()
                                 if(length_of_mru(mru) < 10)
                                 {
                                     mru = insert_at_start_mru(mru,search_str);
-                                    printf("....%s...  found in dctionary \n",search_str);
                                 }
+                                else  // agar mru ka length equal yaa fir jyaada hua to.......
+                                {
+                                    delete_last_node_mru(mru);
+                                    mru = insert_at_start_mru(mru,search_str);
+                                }
+                                
                                 
                             }
                             
                             else // not found in dictionary  (working correctly)
                             {
-                                printf("\" %s \"  word not found in dictionary.\n",search_str);
+                                printf("____%s____ NOT found in dictionary.\n",search_str);
                                 printf("Therefore inserting in Misspelled Word List\n");
                                 if(miss == NULL)
                                 {
