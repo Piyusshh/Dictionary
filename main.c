@@ -198,8 +198,6 @@ void insert_at_word_list(struct row_list_node **row, char str[])
         /* Error one
         //temp->next = r->link_right;   //basically insert at start.
         //r->link_right = temp;
-
-
         par isko isliye nhi kar sakte kyunki isse fir reapted words nhi catch kar paayenge during insertion.....
         */
     }
@@ -412,12 +410,12 @@ int search_in_dictionary_binary(struct row_list_node *row,char search_str[])
     found = binarySearch(r->link_right,search_str);
     if (found == 1)
     {
-        printf(" \"%s\" spellled correctly...........\n\n",search_str);
+        printf(" \"%s\" spellled correctly.....Found in dictionary\n",search_str);
         retval = 1;
     }
     else if(found == 0)
     {
-        printf(" \"%s\" spelled wrongly...........\n\n");
+        printf(" \"%s\" spelled wrongly......Not Found in Dictionary\n");
         retval = 0;
     }
     
@@ -546,129 +544,6 @@ void swap_mru(struct MRU_node **head,struct MRU_node *temp)
     }
 
     temp1->next = temp->next;
-
-    /*
-    first = insert_at_start_mru(first,temp->word);
-    *head = first;
-    first->freq = temp->freq + 1;
-
-    // now first is pointing to head
-
-    struct MRU_node *extra = NULL;
-    extra = first;
-     while (strcmp(first->word,temp->word) != 0)
-     {
-         extra = first;
-         first = first->next;
-     }
-     extra->next = second->next;
-    */
-    
-    /*
-    struct MRU_node *extra;
-    extra = (struct MRU_node*)malloc(sizeof(struct MRU_node));
-
-    extra->freq = head->freq;
-    strcpy(extra->word,head->word);
-    extra->next = head->next;
-
-    first->freq = second->freq;
-    strcpy(first->word,second->word);
-    first->next = second->next;
-
-    second->freq = extra->freq;
-    strcpy(second->word,extra->word);
-    second->next = extra->next;
-    */
-
-
-   
-
-
-    /*
-    struct MRU_node *first;
-    first = head;
-
-    struct MRU_node *second;
-    second = temp;
-
-    struct MRU_node *fourth;
-    fourth = first->next;
-
-    struct MRU_node *third = NULL;
-    struct MRU_node *transverse;
-    transverse = head;
-
-    while(strcmp(transverse->word,temp->word) != 0)
-    {
-        third = transverse;
-        transverse = transverse->next;
-    } // after this lopp i got the previous node of temp.
-
-    first->next = second->next;
-    second->next = fourth;
-    third->next = first;
-
-
-    printf("___%s___ and ___%s___ are Swapped Succesfully\n",first->word,second->word);
-
-
-    return second;
-    */
-    /*
-    struct MRU_node *extra = NULL;
-
-    struct MRU_node *prevX = NULL;
-    struct MRU_node *currX = *head;
-    char varx [ws];
-    strcpy(varx,currX->word);  // varx contains head data
-    while(currX && (strcmp(currX->word,varx) != 0))
-    {
-        prevX = currX;
-        currX = currX->next;
-    }
-
-
-    struct MRU_node *prevY = NULL;
-    struct MRU_node *currY = *head;
-    struct MRU_node *x = *temp;
-    char vary[ws];
-    strcpy(vary,x->word);  // vary contains temp data
-    while(currY && (strcmp(currY->word,vary) != 0))
-    {
-        prevY = currY;
-        currY = currY->next;
-    }
-
-    // if x is not head of linked list
-    if(prevX != NULL)
-    {
-        prevX->next = currY;
-    }
-    else  // Else make y as new head
-    {
-        *head = currY;
-    }
-
-
-    // if y is not head of linked list
-    if(prevY != NULL)
-    {
-        prevY->next = currX;
-    }
-    else   // Else make x as a new head
-    {
-        *head = currX;
-    }
-
-    // Swap next pointers
-    extra = currY->next;
-    currY->next = currX->next;
-    currX->next = temp;
-    
-    
-    printf(" __%s__ and __%s__ are swapped successsfully\n",varx,vary);
-    */
    
 
 }
@@ -704,7 +579,7 @@ struct MRU_node* insert_at_start_mru(struct MRU_node *head, char str[])
         temp->next = head;
         head = temp;
     }
-    printf("____%s____ found in Dictionary and inserted at MRU\n",str);
+    printf("____%s____ inserted at MRU\n\n",str);
 return head;
 }
 
@@ -743,10 +618,6 @@ void delete_last_node_mru(struct MRU_node *mru)
 
 struct miss_node* addToEmpty(struct miss_node *last, char str[])
 {
-    if (last != NULL)
-    {
-        return last;
-    }
 
     struct miss_node *temp = (struct miss_node*)malloc(sizeof(struct miss_node));
     strcpy(temp->word,str);
@@ -755,7 +626,7 @@ struct miss_node* addToEmpty(struct miss_node *last, char str[])
     last = temp;
     last->next = last;
 
-    printf("_%s_ added to empty Misspelled list\n",str);
+    printf("_%s_ added to empty Dictionary Misspelled list\n",str);
 
     return last;
 
@@ -795,6 +666,7 @@ struct miss_node* insert_miss(struct miss_node *last, char str[])
         {
             found = 1; // word found so break
             transverse->freq = transverse->freq + 1;
+            printf("___%s___ already present therefore frequecy increased\n",str);
         }
         transverse = transverse->next; /////newly added
     }
@@ -802,7 +674,7 @@ struct miss_node* insert_miss(struct miss_node *last, char str[])
     if(found == 0)
     {
         last = addEnd(last,str);
-        printf("__%s__ added in Misspelled List\n",str);
+        printf("__%s__ added in Dictionary Misspelled List\n\n",str);
     }
 
     return last;
@@ -843,7 +715,142 @@ void sort_circular_list(struct miss_node *miss_head)
 
     if(head == NULL)
     {
-        printf("Misspelled word list is Empty\n");
+        printf("Dictionary Misspelled word list is Empty\n");
+    }
+    else
+    {
+        do
+        {
+            index = current->next;
+            while(index != head)
+            {
+                if(current->freq > index->freq)
+                {
+                    temp_freq = current->freq;
+                    strcpy(temp_str,current->word);
+
+                    current->freq = index->freq;
+                    strcpy(current->word,index->word);
+
+                    index->freq = temp_freq;
+                    strcpy(index->word,temp_str);
+                }
+
+                index = index->next;
+
+            }
+
+            current = current->next;
+
+        } while (current->next != head);
+        
+    }
+    
+
+
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct miss_node* addToEmpty1(struct miss_node *last, char str[])
+{
+
+    struct miss_node *temp = (struct miss_node*)malloc(sizeof(struct miss_node));
+    strcpy(temp->word,str);
+    temp->freq = 1;
+
+    last = temp;
+    last->next = last;
+
+    printf("_%s_ added to empty MRU Misspelled list\n",str);
+
+    return last;
+
+}
+
+struct miss_node* addEnd1(struct miss_node *last, char str[])
+{
+    struct miss_node *temp = (struct miss_node*)malloc(sizeof(struct miss_node));
+    strcpy(temp->word,str);
+    temp->freq = 1;
+    
+    temp->next = last->next;
+    last->next = temp;
+    last = temp;
+
+    return last;
+}
+
+
+struct miss_node* insert_miss1(struct miss_node *last, char str[])
+{
+    struct miss_node *transverse;
+
+    int found = 0;
+
+    if(last == NULL)
+    {
+        printf(".............................MRU List is Empty........................................\n");
+        return;
+    }
+
+    transverse = last->next; // pointing to the first node of the list 
+    
+    while((transverse != last) && (found == 0))
+    {
+        if(strcmp(transverse->word,str) == 0)
+        {
+            found = 1; // word found so break
+            transverse->freq = transverse->freq + 1;
+            printf("___%s___ already present therefore frequecy increased\n",str);
+        }
+        transverse = transverse->next; /////newly added
+    }
+    
+    if(found == 0)
+    {
+        last = addEnd(last,str);
+        printf("__%s__ added in MRU Misspelled List\n\n",str);
+    }
+
+    return last;
+
+}
+
+
+void print_miss_spelled1(struct miss_node *last)
+{
+    struct miss_node *p;
+    
+    if (last == NULL)
+    {
+        printf("_________________________The List Is Empty__________________________________\n");
+    }
+    p = last->next;
+
+    do
+    {
+        printf("%s   ",p->word);
+        printf("     %d\n",p->freq);
+        p = p->next;
+    }
+    while(p != last->next);
+}
+
+
+void sort_circular_list1(struct miss_node *miss_head)
+{
+    struct miss_node *index = NULL;
+    struct miss_node *current;
+    struct miss_node *head;
+    head = miss_head;
+    current = head;
+
+    int temp_freq;
+    char temp_str[ws];
+
+    if(head == NULL)
+    {
+        printf("MRU Misspelled word list is Empty\n");
     }
     else
     {
@@ -879,7 +886,6 @@ void sort_circular_list(struct miss_node *miss_head)
 }
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main()
 {
@@ -892,6 +898,7 @@ int main()
     char word[20];
 
     struct miss_node *miss = NULL;
+    struct miss_node *miss_mru = NULL;
 
     int choice;
     int flag = 1;
@@ -922,7 +929,8 @@ int main()
         printf("\t\t\t\t\t\t7. Direct From Dictionary:- Search for the spelled and misspleed words\n");
         printf("\t\t\t\t\t\t8. First from MRU:- Search for the speled and misspelled words\n");
         printf("\t\t\t\t\t\t9. Print The Most Recently Used List\n");
-        printf("\t\t\t\t\t\t10. Print The Misspelled word list\n");
+        printf("\t\t\t\t\t\t10. Print The MRU Misspelled word list\n");
+        printf("\t\t\t\t\t\t11. Print The Dictionary Misspelled word list\n");
         printf("\t\t\t\t\t\t15. Exit\n");
         scanf("%d",&choice);
         switch (choice)
@@ -969,6 +977,20 @@ int main()
                     while(fscanf(fp4,"%s",search_str) != EOF)
                     {
                         mru_found = is_present(mru,search_str);    // 1 means found
+                        if(mru_found == 0)   //if not fund in mru
+                        {
+                            printf("___%s___ not found in MRU\n",search_str);
+
+                            if(miss_mru == NULL)
+                            {
+                                miss_mru= addToEmpty1(miss_mru,search_str);
+
+                            }
+                            else
+                            {
+                                miss_mru = insert_miss1(miss_mru,search_str);
+                            }
+                        }
                         
                         if(mru_found == 1)   //    mtlb mil gaya hai ...... isliye legth ka koi issue nhi hai
                         {
@@ -982,12 +1004,11 @@ int main()
                                 temp = search(mru,search_str);
                                 temp->freq = temp->freq + 1;  // frequncy increased
                                 swap_mru(&mru,temp);
-                                //move_to_begining(&mru,&temp);
                             }
                             
                         }
                         
-                        else
+                        if(mru_found == 0)
                         {
                             //printf(" ..%s... not found in mru\n",search_str);
                             dict_found = search_in_dictionary_binary(row,search_str); // 1 means found
@@ -1009,7 +1030,7 @@ int main()
                             else // not found in dictionary  (working correctly)
                             {
                                 printf("____%s____ NOT found in dictionary.\n",search_str);
-                                printf("Therefore inserting in Misspelled Word List\n");
+                                printf("____%s____ Inserted in Dictionary Misspelled Word List\n\n");
                                 if(miss == NULL)
                                 {
                                     miss = addToEmpty(miss,search_str);
@@ -1020,8 +1041,6 @@ int main()
                                     miss = insert_miss(miss,search_str);
                                 }
                             
-                                //insert_at_start_mru(mru,search_str); 
-                               // delete_last_mru(mru);
                             }
                         }
                         
@@ -1032,7 +1051,11 @@ int main()
             case 9: print_mru(mru);
                     break;
 
-            case 10: sort_circular_list(miss->next);  // for sorting the circular list
+            case 10: sort_circular_list1(miss_mru->next);
+                    print_miss_spelled1(miss_mru);
+                    break;
+
+            case 11: sort_circular_list(miss->next);  // for sorting the circular list
                     print_miss_spelled(miss);   // imp imp imp
                     break;
 
@@ -1045,34 +1068,6 @@ int main()
                      break;   
         }
     }
-
-
-   /* 
-    FILE *fp;
-    fp = fopen("a.txt","r");
-
-    if(fp == NULL)
-    {
-        printf("Dictionary File Failed to open\n");
-    }
-    else
-    {
-        printf("The File is now opened\n");
-
-        while(fgets(word,ws,fp) != NULL);  // buffer, size of buffer, file pointer
-        {
-            printf("%d\n", word);
-
-            //void create_dict(row,word);
-        }
-        
-        fclose(fp);  //closing the file
-        printf("The File has been Succesfully Closed\n");
-
-        print_row_list(row);
-    }
-    */
-   
    
 
 
@@ -1081,45 +1076,3 @@ int main()
 
     
 }
-
-
-
-
-
-
-/*
-int main()
-{
-    int i=0;
-    char ch;
-    char str[20];
-    FILE *fp;
-    fp = fopen("a.txt","r");
-    if(fp == NULL)
-    {
-        printf("failed to open\n");
-    }
-    else
-    {
-        ch = fgetc(fp);
-        while(ch != NULL)
-        {
-            i = 0;
-            while(ch != ' ')
-            {
-                
-                str[i] = ch;
-                i++;
-                ch = fgetc(fp);
-            }
-            ch = fgetc(fp);
-
-            printf("%s\n",str);
-        }
-    }
-
-    fclose(fp);
-    
-}
-
-*/
