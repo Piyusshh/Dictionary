@@ -1,0 +1,30 @@
+To Run the Project 
+
+Fisrt built the dictionary list
+then add all thw from dictionary to program
+after it sort the result for optimisation
+then run the mru list.....
+
+the program will first remove all the punctuation from the user input file and will write it into another file
+after it the progran will read word by word from the new input file 
+and then the program structure is as follows 
+
+
+if (word presnt in mru)
+{
+    word spelled correctly
+}
+eles if(word not found in dictionary )
+{
+    store word in mru misspelled word list 
+    and check word for dictionary
+
+    if (word found in dictionary )
+    {
+        add to begining of mru
+    }
+    eles
+    {
+        declare it as misspleed word not found in dictionary.
+    }
+}

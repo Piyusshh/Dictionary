@@ -952,6 +952,7 @@ int main()
                     }
                     
                     // fclose(fp);
+                    break;
                     
             case 5: bubble_sort_dictionary(&row);
                     break;
