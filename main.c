@@ -528,7 +528,7 @@ void swap_mru(struct MRU_node **head,struct MRU_node *temp)
     struct MRU_node *second;
     second = temp;
 
-    printf("___%s___ and ___%s___ are Swapped Succesfully\n",first->word,second->word);
+    printf("___%s___moved ahead of ____%s____ in Mru \n",second->word,first->word);
 
     struct MRU_node *new = (struct MRU_node*)malloc(sizeof(struct MRU_node));
     new->freq = second->freq;
