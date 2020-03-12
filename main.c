@@ -32,7 +32,19 @@ struct miss_node
     struct miss_node *next;
 };
 
+void print_word_list(struct row_list_node *row)   // to pprint the word list of every indexing node
+{
+    struct row_list_node *r;
+    r = row;
+    struct word_list_node *w;          // To capture the first node of word list which is of another type
+    w = r->link_right;
 
+    while(w != NULL)
+    {
+        printf("%s, ",w->word);
+        w = w->next;
+    }
+}
 void print_full_dictionary(struct row_list_node *row) // to print full dictionary with all rows and coloumns...
 {
     struct row_list_node *r;
@@ -47,21 +59,6 @@ void print_full_dictionary(struct row_list_node *row) // to print full dictionar
         r = r->link_down;
     }
 }
-
-void print_word_list(struct row_list_node *row)   // to pprint the word list of every indexing node
-{
-    struct row_list_node *r;
-    r = row;
-    struct word_list_node *w;          // To capture the first node of word list which is of another type
-    w = r->link_right;
-
-    while(w != NULL)
-    {
-        printf("%s, ",w->word);
-        w = w->next;
-    }
-}
-
 
 
 void print_row_list(struct row_list_node *row)
@@ -654,8 +651,8 @@ struct miss_node* insert_miss(struct miss_node *last, char str[])
 
     if(last == NULL)
     {
-        printf(".............................List is Empty........................................\n");
-        return;
+        printf(".............................List is Empty....................ERROR....................\n");
+        return last;
     }
 
     transverse = last->next; // pointing to the first node of the list 
@@ -789,8 +786,8 @@ struct miss_node* insert_miss1(struct miss_node *last, char str[])
 
     if(last == NULL)
     {
-        printf(".............................MRU List is Empty........................................\n");
-        return;
+        printf(".............................MRU List is Empty...................ERROR.....................\n");
+        return last;
     }
 
     transverse = last->next; // pointing to the first node of the list 
